@@ -1,0 +1,54 @@
+<h2>Accolink Dashboard</h2>
+
+<div id="bookings"></div>
+
+<script type="module">
+
+import { supabase } from './supabaseClient.js'
+
+const guesthouseID = localStorage.getItem("guesthouse_id")
+
+async function loadBookings(){
+
+const { data } = await supabase
+.from("bookings")
+.select("*")
+.eq("guesthouse_id", guesthouseID)
+
+let container = document.getElementById("bookings")
+
+data.forEach(b => {
+
+container.innerHTML += `
+<div>
+
+Customer: ${b.customer_name}
+Source: ${b.booking_source}
+Status: ${b.status}
+
+<button onclick="updateStatus('${b.id}','Successful')">Successful</button>
+<button onclick="updateStatus('${b.id}','Pending')">Pending</button>
+<button onclick="updateStatus('${b.id}','Unsuccessful')">Unsuccessful</button>
+
+</div>
+<hr>
+`
+
+})
+
+}
+
+window.updateStatus = async function(id,status){
+
+await supabase
+.from("bookings")
+.update({status:status})
+.eq("id",id)
+
+location.reload()
+
+}
+
+loadBookings()
+
+</script>
