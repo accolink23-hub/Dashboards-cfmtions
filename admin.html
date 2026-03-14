@@ -1,0 +1,36 @@
+<h2>Add Booking</h2>
+
+<input id="name" placeholder="Customer Name">
+
+<select id="source">
+<option>WhatsApp</option>
+<option>Call</option>
+</select>
+
+<button onclick="addBooking()">Add Booking</button>
+
+<script type="module">
+
+import { supabase } from './supabaseClient.js'
+
+async function addBooking(){
+
+const name = document.getElementById("name").value
+const source = document.getElementById("source").value
+
+await supabase
+.from("bookings")
+.insert([
+{
+customer_name: name,
+guesthouse_id: "GUESTHOUSE_ID",
+booking_source: source,
+status: "Pending"
+}
+])
+
+alert("Booking Added")
+
+}
+
+</script>
